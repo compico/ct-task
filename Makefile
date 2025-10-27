@@ -2,6 +2,9 @@ docker_exec = docker-compose exec php
 docker_php_exec = docker-compose exec php php
 docker_artisan_exec = docker-compose exec php php artisan
 
+up:
+	docker-compose up -d
+
 clean:
 	php artisan cache:clear
 	php artisan config:clear
