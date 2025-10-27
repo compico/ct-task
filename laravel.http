@@ -1,0 +1,42 @@
+### api/deposit
+POST http://localhost/api/deposit
+Content-Type: application/json
+Accept: application/json
+
+{
+    "amount": 1321.124123,
+    "comment": "Даём деньги",
+    "user_id": 5
+}
+
+### api/withdraw
+POST http://localhost/api/withdraw
+Content-Type: application/json
+Accept: application/json
+
+{
+    "amount": 1321.124123,
+    "comment": "Забираем деньги",
+    "user_id": 5
+}
+
+### api/transfer
+POST http://localhost/api/transfer
+Content-Type: application/json
+Accept: application/json
+
+{
+    "from_user_id": 4,
+    "to_user_id": 6,
+    "amount": 1321.124123,
+    "comment": "перевод"
+}
+
+### api/balance/{user_id}
+GET http://localhost/api/balance/4
+Accept: application/json
+
+### api/balance/{user_id}
+GET http://localhost/api/balance/6
+Accept: application/json
+

@@ -7,6 +7,8 @@ services:
     container_name: ct-task-nginx
     volumes:
       - ./public:/var/www/public
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "80:80"
     depends_on:
@@ -21,7 +23,7 @@ services:
     volumes:
       - ./:/var/www
     depends_on:
-      mysql:
+      pg:
         condition: service_healthy
 
   pg:
@@ -53,20 +55,6 @@ services:
       REDIS_DATABASES: 1
       REDIS_PASSWORD: '${REDIS_PASSWORD}'
       REDIS_PORT: '${REDIS_PORT:-6379}'
-
-  vite:
-    build:
-      context: .
-      dockerfile: ./docker/vite/Dockerfile
-    volumes:
-      - ./:/app
-    ports:
-      - "5173:5173"
-    container_name: ct-task-vite
-    restart: unless-stopped
-    environment:
-      VITE_APP_NAME: '${VITE_APP_NAME}'
-      VITE_APP_URL: '${VITE_APP_URL}'
 
 volumes:
   ct-task-pg_local:

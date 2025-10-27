@@ -20,13 +20,15 @@ RUN apk add --no-cache --virtual .build-deps \
         icu-dev \
         libxml2-dev \
         sqlite-dev \
-        linux-headers
+        linux-headers \
+        libpq-dev
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         pdo \
         pdo_mysql \
         pdo_sqlite \
+        pdo_pgsql \
         gd \
         zip \
         mbstring \
@@ -60,7 +62,8 @@ RUN apk add --no-cache \
         sqlite \
         mysql-client \
         bash \
-        make
+        make \
+        libpq
 
 RUN addgroup -g 82 www-data 2>/dev/null || true \
     && adduser -u 1000 -G www-data -s /bin/sh -D -h /var/www appuser 2>/dev/null || true
@@ -76,13 +79,13 @@ RUN echo "memory_limit = 256M" > /usr/local/etc/php/conf.d/laravel.ini \
     && echo "max_input_vars = 3000" >> /usr/local/etc/php/conf.d/laravel.ini \
     && echo "date.timezone = UTC" >> /usr/local/etc/php/conf.d/laravel.ini
 
-RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.memory_consumption=256" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.interned_strings_buffer=16" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.max_accelerated_files=10000" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.revalidate_freq=2" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.fast_shutdown=1" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.validate_timestamps=1" >> /usr/local/etc/php/conf.d/opcache.ini
+# RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
+#    && echo "opcache.memory_consumption=256" >> /usr/local/etc/php/conf.d/opcache.ini \
+#    && echo "opcache.interned_strings_buffer=16" >> /usr/local/etc/php/conf.d/opcache.ini \
+#    && echo "opcache.max_accelerated_files=10000" >> /usr/local/etc/php/conf.d/opcache.ini \
+#    && echo "opcache.revalidate_freq=2" >> /usr/local/etc/php/conf.d/opcache.ini \
+#    && echo "opcache.fast_shutdown=1" >> /usr/local/etc/php/conf.d/opcache.ini \
+#    && echo "opcache.validate_timestamps=1" >> /usr/local/etc/php/conf.d/opcache.ini
 
 RUN mkdir -p /var/www/storage/logs \
     && mkdir -p /var/www/storage/framework/cache \
@@ -102,4 +105,3 @@ USER appuser
 EXPOSE 9000
 
 CMD ["php-fpm"]
-

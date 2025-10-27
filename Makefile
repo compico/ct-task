@@ -2,9 +2,6 @@ docker_exec = docker-compose exec php
 docker_php_exec = docker-compose exec php php
 docker_artisan_exec = docker-compose exec php php artisan
 
-dclear:
-	$(docker_exec) make clean
-
 clean:
 	php artisan cache:clear
 	php artisan config:clear
@@ -18,5 +15,12 @@ clean:
 	rm -rf storage/framework/views/*
 	composer dump-autoload
 
+dclear:
+	$(docker_exec) make clean
+
+
 dmigrate:
 	$(docker_artisan_exec) migrate
+
+dseed:
+	$(docker_artisan_exec) db:seed
